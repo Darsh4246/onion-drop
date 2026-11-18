@@ -1,0 +1,47 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oniondrop-web
+    user: "10001:10001"
+    restart: unless-stopped
+    ports:
+      # Strictly bind to 127.0.0.1 on the host to avoid exposing to the public internet
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    volumes:
+      # Bind mounts for persistent data
+      - ./data/uploads:/app/data/uploads
+      - ./data/db:/app/data/db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - oniondrop-net
+
+  # Optional integrated Tor Hidden Service
+  # Run `docker compose --profile tor up -d` to automatically spin up a Tor onion address
+  tor:
+    build:
+      context: ./tor
+      dockerfile: Dockerfile
+    container_name: oniondrop-tor
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    volumes:
+      - ./tor/data:/var/lib/tor/oniondrop_service
+    networks:
+      - oniondrop-net
+    profiles:
+      - tor
+
+networks:
+  oniondrop-net:
+    driver: bridge

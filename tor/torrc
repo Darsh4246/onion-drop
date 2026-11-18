@@ -1,0 +1,7 @@
+# OnionDrop Tor Daemon Configuration
+DataDirectory /var/lib/tor
+
+# Hidden Service mapping: forward port 80 on the .onion address to OnionDrop web container
+HiddenServiceDir /var/lib/tor/oniondrop_service/
+HiddenServicePort 80 web:8000
+HiddenServiceVersion 3

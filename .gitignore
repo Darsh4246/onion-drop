@@ -1,0 +1,34 @@
+# Environment and credentials
+.env
+.env.local
+
+# Uploaded files and database data (STRICTLY PRIVATE)
+data/uploads/*
+!data/uploads/.gitkeep
+data/db/*
+!data/db/.gitkeep
+
+# Tor Hidden Service keys and state
+tor/data/
+tor/keys/
+
+# Python cache and byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
